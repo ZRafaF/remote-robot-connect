@@ -1,16 +1,10 @@
-import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
-
-import { al } from "./src/helper/blAPI";
-
-import { BleManager } from "react-native-ble-plx";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import DeviceModal from "./src/components/DeviceConnection/DeviceConnectionModal";
 import useBLE from "./src/hooks/useBle";
-import DeviceModal from "./src/components/DeviceConnectionModal";
+import CommunicationArea from "./src/components/CommunicationArea";
 
-export const manager = new BleManager();
-
-export default function App() {
+const App = () => {
 	const {
 		requestPermissions,
 		scanForPeripherals,
@@ -20,7 +14,6 @@ export default function App() {
 		heartRate,
 		disconnectFromDevice,
 	} = useBLE();
-
 	const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
 	const scanForDevices = async () => {
@@ -40,31 +33,51 @@ export default function App() {
 	};
 
 	return (
-		<View style={styles.container}>
-			<Text>Open up App.tsx to start working on your app!</Text>
-			<StatusBar style="auto" />
-			<Button title="mes" onPress={scanForDevices} />
-			<Button
-				title="Toggle Modal"
-				onPress={() => {
-					setIsModalVisible((old) => !old);
+		<SafeAreaView
+			style={{
+				flex: 1,
+				backgroundColor: "#1E1E1E",
+			}}
+		>
+			<View
+				style={{
+					flex: 1,
+					justifyContent: "center",
+					alignItems: "center",
 				}}
-			/>
+			>
+				<CommunicationArea />
+			</View>
+			<TouchableOpacity
+				onPress={connectedDevice ? disconnectFromDevice : openModal}
+				style={{
+					backgroundColor: "#007ACC",
+					justifyContent: "center",
+					alignItems: "center",
+					height: 50,
+					marginHorizontal: 40,
+					marginVertical: 10,
+					borderRadius: 8,
+				}}
+			>
+				<Text
+					style={{
+						fontSize: 18,
+						fontWeight: "bold",
+						color: "white",
+					}}
+				>
+					{connectedDevice ? "Disconnect" : "Connect"}
+				</Text>
+			</TouchableOpacity>
 			<DeviceModal
 				closeModal={hideModal}
 				visible={isModalVisible}
 				connectToPeripheral={connectToDevice}
 				devices={allDevices}
 			/>
-		</View>
+		</SafeAreaView>
 	);
-}
+};
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#fff",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-});
+export default App;

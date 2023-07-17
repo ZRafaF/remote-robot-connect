@@ -1,8 +1,4 @@
-// Copyright (c) 2023 rafae
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
-
+/* eslint-disable no-bitwise */
 import { useMemo, useState } from "react";
 import { PermissionsAndroid, Platform } from "react-native";
 import {
@@ -14,8 +10,8 @@ import {
 
 import * as ExpoDevice from "expo-device";
 
-const HEART_RATE_UUID = "0000180d-0000-1000-8000-00805f9b34fb";
-const HEART_RATE_CHARACTERISTIC = "00002a37-0000-1000-8000-00805f9b34fb";
+const HEART_RATE_UUID = "3e60a07c-235e-11ee-be56-0242ac120002";
+const HEART_RATE_CHARACTERISTIC = "6bf30bea-2392-11ee-be56-0242ac120002";
 
 interface BluetoothLowEnergyApi {
 	requestPermissions(): Promise<boolean>;
@@ -24,14 +20,14 @@ interface BluetoothLowEnergyApi {
 	disconnectFromDevice: () => void;
 	connectedDevice: Device | null;
 	allDevices: Device[];
-	heartRate: number;
+	heartRate: string;
 }
 
 function useBLE(): BluetoothLowEnergyApi {
 	const bleManager = useMemo(() => new BleManager(), []);
 	const [allDevices, setAllDevices] = useState<Device[]>([]);
 	const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
-	const [heartRate, setHeartRate] = useState<number>(0);
+	const [heartRate, setHeartRate] = useState<string>("");
 
 	const requestAndroid31Permissions = async () => {
 		const bluetoothScanPermission = await PermissionsAndroid.request(
@@ -93,11 +89,11 @@ function useBLE(): BluetoothLowEnergyApi {
 		devices.findIndex((device) => nextDevice.id === device.id) > -1;
 
 	const scanForPeripherals = () =>
-		bleManager.startDeviceScan(null, null, (error, device) => {
+		bleManager.startDeviceScan([HEART_RATE_UUID], null, (error, device) => {
 			if (error) {
 				console.log(error);
 			}
-			if (device && device.name?.includes("CorSense")) {
+			if (device) {
 				setAllDevices((prevState: Device[]) => {
 					if (!isDuplicteDevice(prevState, device)) {
 						return [...prevState, device];
@@ -125,7 +121,7 @@ function useBLE(): BluetoothLowEnergyApi {
 		if (connectedDevice) {
 			bleManager.cancelDeviceConnection(connectedDevice.id);
 			setConnectedDevice(null);
-			setHeartRate(0);
+			setHeartRate("");
 		}
 	};
 
@@ -142,19 +138,7 @@ function useBLE(): BluetoothLowEnergyApi {
 		}
 
 		const rawData = characteristic.value;
-		let innerHeartRate: number = -1;
-
-		const firstBitValue: number = Number(rawData) & 0x01;
-
-		if (firstBitValue === 0) {
-			innerHeartRate = rawData[1].charCodeAt(0);
-		} else {
-			innerHeartRate =
-				Number(rawData[1].charCodeAt(0) << 8) +
-				Number(rawData[2].charCodeAt(2));
-		}
-
-		setHeartRate(innerHeartRate);
+		setHeartRate(rawData);
 	};
 
 	const startStreamingData = async (device: Device) => {
