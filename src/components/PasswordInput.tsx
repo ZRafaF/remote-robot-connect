@@ -16,10 +16,9 @@ const PasswordInput: FunctionComponent<PasswordInputProps> = () => {
 		<View
 			style={{
 				flexDirection: "row",
-				gap: 10,
 				padding: 13,
 				backgroundColor: "#252526",
-				justifyContent: "center",
+				justifyContent: "space-around",
 				alignItems: "center",
 			}}
 		>
@@ -29,12 +28,13 @@ const PasswordInput: FunctionComponent<PasswordInputProps> = () => {
 					height: 40,
 					maxWidth: 150,
 					borderWidth: 1,
+					marginRight: 30,
 					padding: 10,
 					color: "white",
 					borderColor: "grey",
 					borderRadius: 8,
 				}}
-				placeholderTextColor={"white"}
+				placeholderTextColor={"grey"}
 				onChangeText={onChangeNumber}
 				value={number}
 				placeholder="Inserir senha"
@@ -45,7 +45,7 @@ const PasswordInput: FunctionComponent<PasswordInputProps> = () => {
 				style={{
 					flex: 1,
 
-					fontSize: 20,
+					fontSize: 15,
 					fontWeight: "bold",
 
 					color: "white",

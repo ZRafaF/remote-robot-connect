@@ -17,8 +17,9 @@ const ExtraComponent: FunctionComponent<ExtraComponentProps> = () => {
 				borderRadius: 12,
 				gap: 10,
 				padding: 13,
-				borderWidth: 3,
-				borderColor: "#252526",
+				borderWidth: 1.5,
+				marginVertical: 10,
+				borderColor: "#2D2D30",
 				justifyContent: "center",
 				alignItems: "center",
 			}}
@@ -32,23 +33,51 @@ const ExtraComponent: FunctionComponent<ExtraComponentProps> = () => {
 					borderRadius: 8,
 				}}
 			>
-				<Text
+				<View
 					style={{
-						fontSize: 30,
-						fontWeight: "bold",
-
-						color: "white",
+						alignSelf: "stretch",
+						paddingVertical: 5,
+						justifyContent: "space-around",
+						alignItems: "center",
+						borderRadius: 8,
 					}}
 				>
-					EXTRA
-				</Text>
+					<Text
+						style={{
+							fontSize: 30,
+							fontWeight: "bold",
+							color: "white",
+						}}
+					>
+						EXTRA
+					</Text>
+					<View
+						style={{
+							alignSelf: "stretch",
+							flexDirection: "row",
+							gap: 10,
+							justifyContent: "space-around",
+							alignItems: "center",
+							borderRadius: 8,
+						}}
+					>
+						<Text
+							style={{
+								flex: 1,
+								fontWeight: "bold",
+								color: "white",
+								alignSelf: "stretch",
+								fontSize: 15,
+								textAlign: "left",
+							}}
+						>
+							Recebido:
+						</Text>
+					</View>
+				</View>
 			</View>
 
-			<CardComponent
-				cardCallBack={() => {}}
-				cardTitle="EXTRA"
-				defaultColor="#BCD8C1"
-			/>
+			<CardComponent cardCallBack={() => {}} cardTitle="EXTRA" />
 		</View>
 	);
 };

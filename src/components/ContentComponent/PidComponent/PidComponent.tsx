@@ -15,18 +15,18 @@ const PidComponent: FunctionComponent<PidComponentProps> = () => {
 		<View
 			style={{
 				borderRadius: 12,
-				gap: 10,
 				padding: 13,
-				borderWidth: 3,
-				borderColor: "#252526",
+				borderWidth: 1.5,
+				borderColor: "#2D2D30",
 				justifyContent: "center",
 				alignItems: "center",
+				marginVertical: 10,
 			}}
 		>
 			<View
 				style={{
 					alignSelf: "stretch",
-
+					paddingVertical: 5,
 					justifyContent: "space-around",
 					alignItems: "center",
 					borderRadius: 8,
@@ -48,7 +48,6 @@ const PidComponent: FunctionComponent<PidComponentProps> = () => {
 
 						flexDirection: "row",
 						gap: 10,
-						padding: 13,
 						justifyContent: "space-around",
 						alignItems: "center",
 						borderRadius: 8,
@@ -56,9 +55,8 @@ const PidComponent: FunctionComponent<PidComponentProps> = () => {
 				>
 					<Text
 						style={{
-							fontSize: 20,
+							fontSize: 15,
 							fontWeight: "bold",
-
 							color: "red",
 						}}
 					>
@@ -66,9 +64,8 @@ const PidComponent: FunctionComponent<PidComponentProps> = () => {
 					</Text>
 					<Text
 						style={{
-							fontSize: 20,
+							fontSize: 15,
 							fontWeight: "bold",
-
 							color: "green",
 						}}
 					>
@@ -76,9 +73,8 @@ const PidComponent: FunctionComponent<PidComponentProps> = () => {
 					</Text>
 					<Text
 						style={{
-							fontSize: 20,
+							fontSize: 15,
 							fontWeight: "bold",
-
 							color: "blue",
 						}}
 					>

@@ -23,10 +23,9 @@ const CardComponent: FunctionComponent<CardComponentProps> = ({
 		<View
 			style={{
 				alignSelf: "stretch",
-
 				flexDirection: "row",
-				gap: 10,
 				padding: 13,
+				marginVertical: 5,
 				backgroundColor: "#252526",
 				justifyContent: "space-around",
 				alignItems: "center",
@@ -52,11 +51,11 @@ const CardComponent: FunctionComponent<CardComponentProps> = ({
 					maxWidth: 150,
 					borderWidth: 1,
 					padding: 10,
-					color: "red",
+					color: "white",
 					borderColor: "grey",
 					borderRadius: 8,
 				}}
-				placeholderTextColor={"white"}
+				placeholderTextColor={"grey"}
 				onChangeText={onChangeNumber}
 				value={number}
 				placeholder="Novo valor"
