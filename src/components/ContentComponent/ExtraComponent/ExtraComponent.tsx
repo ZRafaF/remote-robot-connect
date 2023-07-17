@@ -8,9 +8,16 @@ import { FunctionComponent } from "react";
 import { Text, View } from "react-native";
 import CardComponent from "./CardComponent";
 
-interface ExtraComponentProps {}
+interface ExtraComponentProps {
+	extraValue: string;
 
-const ExtraComponent: FunctionComponent<ExtraComponentProps> = () => {
+	sendExtra: (data: string) => void;
+}
+
+const ExtraComponent: FunctionComponent<ExtraComponentProps> = ({
+	extraValue,
+	sendExtra,
+}) => {
 	return (
 		<View
 			style={{
@@ -71,13 +78,18 @@ const ExtraComponent: FunctionComponent<ExtraComponentProps> = () => {
 								textAlign: "left",
 							}}
 						>
-							Recebido:
+							Recebido: {extraValue}
 						</Text>
 					</View>
 				</View>
 			</View>
 
-			<CardComponent cardCallBack={() => {}} cardTitle="EXTRA" />
+			<CardComponent
+				cardCallBack={(value: string) => {
+					sendExtra(value);
+				}}
+				cardTitle="EXTRA"
+			/>
 		</View>
 	);
 };

@@ -3,12 +3,13 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { BleError, Characteristic, Device } from "react-native-ble-plx";
 import { SERVICE_UUID } from "../helper/bleHelper";
 
-const useSubscribe = (characteristicUUID: string) => {
+import base64 from "react-native-base64";
+const useSubscribe = (characteristicUUID: string, device: Device | null) => {
 	const [value, setValue] = useState<string>("");
 
 	const onHeartRateUpdate = (
@@ -23,23 +24,41 @@ const useSubscribe = (characteristicUUID: string) => {
 			return -1;
 		}
 
-		const rawData = characteristic.value;
+		console.log(characteristic.value);
+
+		const rawData = base64.decode(characteristic.value);
+
 		setValue(rawData);
 	};
 
-	const subscribe = async (device: Device) => {
-		if (device) {
-			device.monitorCharacteristicForService(
-				SERVICE_UUID,
-				characteristicUUID,
-				onHeartRateUpdate
-			);
-		} else {
-			console.log("No Device Connected");
-		}
-	};
+	useEffect(() => {
+		const subscribe = async () => {
+			device
+				?.readCharacteristicForService(SERVICE_UUID, characteristicUUID)
+				.then((characteristic: Characteristic | null) => {
+					if (!characteristic?.value) {
+						console.log("No Data was recieved");
+						return;
+					}
+					const rawData = base64.decode(characteristic.value);
 
-	return [value, subscribe] as const;
+					setValue(rawData);
+				});
+
+			if (device) {
+				device.monitorCharacteristicForService(
+					SERVICE_UUID,
+					characteristicUUID,
+					onHeartRateUpdate
+				);
+			} else {
+				console.log("No Device Connected");
+			}
+		};
+		if (device) subscribe();
+	}, [device]);
+
+	return [value] as const;
 };
 
 export default useSubscribe;

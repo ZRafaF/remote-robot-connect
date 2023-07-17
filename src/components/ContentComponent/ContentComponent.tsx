@@ -10,32 +10,53 @@ import PidComponent from "./PidComponent/PidComponent";
 import useSubscribe from "../../hooks/useSubscribe";
 import {
 	D_GET_CHARACTERISTIC,
+	D_SET_CHARACTERISTIC,
 	EXTRA_GET_CHARACTERISTIC,
+	EXTRA_SET_CHARACTERISTIC,
 	I_GET_CHARACTERISTIC,
+	I_SET_CHARACTERISTIC,
 	P_GET_CHARACTERISTIC,
+	P_SET_CHARACTERISTIC,
 } from "../../helper/bleHelper";
+import { Device } from "react-native-ble-plx";
+import useSend from "../../hooks/useSend";
 
 interface ContentComponentProps {
-	enabled: boolean;
+	device: Device | null;
+	password: string;
 }
 
 const ContentComponent: FunctionComponent<ContentComponentProps> = ({
-	enabled,
+	device,
+	password,
 }) => {
-	const [pValue, pSubscribe] = useSubscribe(P_GET_CHARACTERISTIC);
-	const [iValue, iSubscribe] = useSubscribe(I_GET_CHARACTERISTIC);
-	const [dValue, dSubscribe] = useSubscribe(D_GET_CHARACTERISTIC);
-	const [extraValue, extraSubscribe] = useSubscribe(EXTRA_GET_CHARACTERISTIC);
+	const [pValue] = useSubscribe(P_GET_CHARACTERISTIC, device);
+	const [iValue] = useSubscribe(I_GET_CHARACTERISTIC, device);
+	const [dValue] = useSubscribe(D_GET_CHARACTERISTIC, device);
+	const [extraValue] = useSubscribe(EXTRA_GET_CHARACTERISTIC, device);
+
+	const [sendP] = useSend(P_SET_CHARACTERISTIC, device, password);
+	const [sendI] = useSend(I_SET_CHARACTERISTIC, device, password);
+	const [sendD] = useSend(D_SET_CHARACTERISTIC, device, password);
+	const [sendExtra] = useSend(EXTRA_SET_CHARACTERISTIC, device, password);
+
 	return (
 		<View
-			pointerEvents={enabled ? "auto" : "none"}
+			pointerEvents={device ? "auto" : "none"}
 			style={{
-				opacity: enabled ? 1 : 0.2,
+				opacity: device ? 1 : 0.2,
 				padding: 20,
 			}}
 		>
-			<PidComponent />
-			<ExtraComponent />
+			<PidComponent
+				pValue={pValue}
+				iValue={iValue}
+				dValue={dValue}
+				sendP={sendP}
+				sendI={sendI}
+				sendD={sendD}
+			/>
+			<ExtraComponent extraValue={extraValue} sendExtra={sendExtra} />
 		</View>
 	);
 };

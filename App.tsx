@@ -6,16 +6,17 @@ import PasswordInput from "./src/components/PasswordInput";
 import ContentComponent from "./src/components/ContentComponent/ContentComponent";
 
 const App = () => {
-	const {
+	const [
 		requestPermissions,
 		scanForPeripherals,
 		allDevices,
 		connectToDevice,
-		connectedDevice,
-		heartRate,
 		disconnectFromDevice,
-	} = useBLE();
+		connectedDevice,
+	] = useBLE();
 	const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
+	const [password, setPassword] = useState<string>("");
 
 	const scanForDevices = async () => {
 		const isPermissionsEnabled = await requestPermissions();
@@ -40,8 +41,11 @@ const App = () => {
 				backgroundColor: "#1E1E1E",
 			}}
 		>
-			<PasswordInput />
-			<ContentComponent enabled={true} />
+			<PasswordInput
+				passwordString={password}
+				setPasswordString={setPassword}
+			/>
+			<ContentComponent device={connectedDevice} password={password} />
 			<View
 				style={{
 					flex: 1,

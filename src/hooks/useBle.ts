@@ -13,21 +13,10 @@ import * as ExpoDevice from "expo-device";
 const HEART_RATE_UUID = "3e60a07c-235e-11ee-be56-0242ac120002";
 const HEART_RATE_CHARACTERISTIC = "6bf30bea-2392-11ee-be56-0242ac120002";
 
-interface BluetoothLowEnergyApi {
-	requestPermissions(): Promise<boolean>;
-	scanForPeripherals(): void;
-	connectToDevice: (deviceId: Device) => Promise<void>;
-	disconnectFromDevice: () => void;
-	connectedDevice: Device | null;
-	allDevices: Device[];
-	heartRate: string;
-}
-
-function useBLE(): BluetoothLowEnergyApi {
+const useBLE = () => {
 	const bleManager = useMemo(() => new BleManager(), []);
 	const [allDevices, setAllDevices] = useState<Device[]>([]);
 	const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
-	const [heartRate, setHeartRate] = useState<string>("");
 
 	const requestAndroid31Permissions = async () => {
 		const bluetoothScanPermission = await PermissionsAndroid.request(
@@ -104,64 +93,41 @@ function useBLE(): BluetoothLowEnergyApi {
 		});
 
 	const connectToDevice = async (device: Device) => {
-		try {
-			const deviceConnection = await bleManager.connectToDevice(
-				device.id
-			);
-			setConnectedDevice(deviceConnection);
-			await deviceConnection.discoverAllServicesAndCharacteristics();
-			bleManager.stopDeviceScan();
-			startStreamingData(deviceConnection);
-		} catch (e) {
-			console.log("FAILED TO CONNECT", e);
-		}
+		bleManager
+			.connectToDevice(device.id)
+			.then((deviceConnection) => {
+				deviceConnection
+					.discoverAllServicesAndCharacteristics()
+					.then((discDev) => {
+						setConnectedDevice(discDev);
+					})
+					.then(() => {
+						bleManager.stopDeviceScan();
+					})
+					.catch((error) => {
+						console.error(error);
+					});
+			})
+			.catch((error) => {
+				console.error("FAILED TO CONNECT", error);
+			});
 	};
 
 	const disconnectFromDevice = () => {
 		if (connectedDevice) {
 			bleManager.cancelDeviceConnection(connectedDevice.id);
 			setConnectedDevice(null);
-			setHeartRate("");
 		}
 	};
 
-	const onHeartRateUpdate = (
-		error: BleError | null,
-		characteristic: Characteristic | null
-	) => {
-		if (error) {
-			console.log(error);
-			return -1;
-		} else if (!characteristic?.value) {
-			console.log("No Data was recieved");
-			return -1;
-		}
-
-		const rawData = characteristic.value;
-		setHeartRate(rawData);
-	};
-
-	const startStreamingData = async (device: Device) => {
-		if (device) {
-			device.monitorCharacteristicForService(
-				HEART_RATE_UUID,
-				HEART_RATE_CHARACTERISTIC,
-				onHeartRateUpdate
-			);
-		} else {
-			console.log("No Device Connected");
-		}
-	};
-
-	return {
-		scanForPeripherals,
+	return [
 		requestPermissions,
-		connectToDevice,
+		scanForPeripherals,
 		allDevices,
-		connectedDevice,
+		connectToDevice,
 		disconnectFromDevice,
-		heartRate,
-	};
-}
+		connectedDevice,
+	] as const;
+};
 
 export default useBLE;

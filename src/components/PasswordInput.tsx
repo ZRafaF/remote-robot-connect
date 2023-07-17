@@ -3,15 +3,19 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { FunctionComponent, useState } from "react";
+import { Dispatch, FunctionComponent, SetStateAction, useState } from "react";
 
 import { Text, View, TextInput } from "react-native";
 
-interface PasswordInputProps {}
+interface PasswordInputProps {
+	passwordString: string;
+	setPasswordString: Dispatch<SetStateAction<string>>;
+}
 
-const PasswordInput: FunctionComponent<PasswordInputProps> = () => {
-	const [number, onChangeNumber] = useState("");
-
+const PasswordInput: FunctionComponent<PasswordInputProps> = ({
+	passwordString,
+	setPasswordString,
+}) => {
 	return (
 		<View
 			style={{
@@ -35,10 +39,9 @@ const PasswordInput: FunctionComponent<PasswordInputProps> = () => {
 					borderRadius: 8,
 				}}
 				placeholderTextColor={"grey"}
-				onChangeText={onChangeNumber}
-				value={number}
+				onChangeText={setPasswordString}
+				value={passwordString}
 				placeholder="Inserir senha"
-				keyboardType="numeric"
 			/>
 
 			<Text
@@ -51,7 +54,7 @@ const PasswordInput: FunctionComponent<PasswordInputProps> = () => {
 					color: "white",
 				}}
 			>
-				SENHA: {number}
+				SENHA: {passwordString}
 			</Text>
 		</View>
 	);

@@ -8,9 +8,24 @@ import { FunctionComponent } from "react";
 import { Text, View } from "react-native";
 import CardComponent from "./CardComponent";
 
-interface PidComponentProps {}
+interface PidComponentProps {
+	pValue: string;
+	iValue: string;
+	dValue: string;
 
-const PidComponent: FunctionComponent<PidComponentProps> = () => {
+	sendP: (data: string) => void;
+	sendI: (data: string) => void;
+	sendD: (data: string) => void;
+}
+
+const PidComponent: FunctionComponent<PidComponentProps> = ({
+	pValue,
+	iValue,
+	dValue,
+	sendP,
+	sendI,
+	sendD,
+}) => {
 	return (
 		<View
 			style={{
@@ -60,7 +75,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = () => {
 							color: "red",
 						}}
 					>
-						P: 0.2
+						P: {parseFloat(pValue).toFixed(3)}
 					</Text>
 					<Text
 						style={{
@@ -69,7 +84,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = () => {
 							color: "green",
 						}}
 					>
-						I: 0.2
+						I: {parseFloat(iValue).toFixed(3)}
 					</Text>
 					<Text
 						style={{
@@ -78,23 +93,29 @@ const PidComponent: FunctionComponent<PidComponentProps> = () => {
 							color: "blue",
 						}}
 					>
-						D: 0.2
+						D: {parseFloat(dValue).toFixed(3)}
 					</Text>
 				</View>
 			</View>
 
 			<CardComponent
-				cardCallBack={() => {}}
+				cardCallBack={(value: string) => {
+					sendP(value);
+				}}
 				cardTitle="P"
 				defaultColor="red"
 			/>
 			<CardComponent
-				cardCallBack={() => {}}
+				cardCallBack={(value: string) => {
+					sendI(value);
+				}}
 				cardTitle="I"
 				defaultColor="green"
 			/>
 			<CardComponent
-				cardCallBack={() => {}}
+				cardCallBack={(value: string) => {
+					sendD(value);
+				}}
 				cardTitle="D"
 				defaultColor="blue"
 			/>

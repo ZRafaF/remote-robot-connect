@@ -4,11 +4,18 @@
 // https://opensource.org/licenses/MIT
 
 import { FunctionComponent, useState } from "react";
-import { TextInput, View, Text, Button, ColorValue } from "react-native";
+import {
+	TextInput,
+	View,
+	Text,
+	Button,
+	ColorValue,
+	Keyboard,
+} from "react-native";
 
 interface CardComponentProps {
 	cardTitle: string;
-	cardCallBack: (value: number) => void;
+	cardCallBack: (value: string) => void;
 }
 
 const CardComponent: FunctionComponent<CardComponentProps> = ({
@@ -17,6 +24,10 @@ const CardComponent: FunctionComponent<CardComponentProps> = ({
 }) => {
 	const [number, onChangeNumber] = useState("");
 
+	const triggerCallBack = () => {
+		cardCallBack(number);
+		Keyboard.dismiss();
+	};
 	return (
 		<View
 			style={{
@@ -41,12 +52,13 @@ const CardComponent: FunctionComponent<CardComponentProps> = ({
 					borderColor: "grey",
 					borderRadius: 8,
 				}}
+				onSubmitEditing={triggerCallBack}
 				placeholderTextColor={"grey"}
 				onChangeText={onChangeNumber}
 				value={number}
 				placeholder="Novo valor"
 			/>
-			<Button title="ENVIAR" color="#3E3E42" />
+			<Button title="ENVIAR" color="#3E3E42" onPress={triggerCallBack} />
 		</View>
 	);
 };
