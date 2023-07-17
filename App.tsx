@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import DeviceModal from "./src/components/DeviceConnection/DeviceConnectionModal";
 import useBLE from "./src/hooks/useBle";
-import CommunicationArea from "./src/components/CommunicationArea";
 import PasswordInput from "./src/components/PasswordInput";
+import ContentComponent from "./src/components/ContentComponent/ContentComponent";
 
 const App = () => {
 	const {
@@ -41,7 +41,7 @@ const App = () => {
 			}}
 		>
 			<PasswordInput />
-			<CommunicationArea enabled={false} />
+			<ContentComponent enabled={true} />
 			<View
 				style={{
 					flex: 1,
