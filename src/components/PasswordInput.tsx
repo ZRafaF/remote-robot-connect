@@ -5,24 +5,17 @@
 
 import { FunctionComponent, useState } from "react";
 
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import { StyleSheet, Text, View, TextInput } from "react-native";
 
-interface CommunicationAreaProps {
-	enabled: boolean;
-}
+interface PasswordInputProps {}
 
-const CommunicationArea: FunctionComponent<CommunicationAreaProps> = ({
-	enabled,
-}) => {
+const PasswordInput: FunctionComponent<PasswordInputProps> = () => {
 	const [number, onChangeNumber] = useState("");
 
 	return (
 		<View
-			pointerEvents={enabled ? "auto" : "none"}
 			style={{
-				opacity: enabled ? 1 : 0.2,
 				flexDirection: "row",
-				margin: 30,
 				gap: 10,
 				padding: 13,
 				backgroundColor: "#252526",
@@ -30,6 +23,24 @@ const CommunicationArea: FunctionComponent<CommunicationAreaProps> = ({
 				alignItems: "center",
 			}}
 		>
+			<TextInput
+				style={{
+					flex: 1,
+					height: 40,
+					maxWidth: 150,
+					borderWidth: 1,
+					padding: 10,
+					color: "white",
+					borderColor: "grey",
+					borderRadius: 8,
+				}}
+				placeholderTextColor={"white"}
+				onChangeText={onChangeNumber}
+				value={number}
+				placeholder="Inserir senha"
+				keyboardType="numeric"
+			/>
+
 			<Text
 				style={{
 					flex: 1,
@@ -42,9 +53,8 @@ const CommunicationArea: FunctionComponent<CommunicationAreaProps> = ({
 			>
 				SENHA: {number}
 			</Text>
-			<Button title="mike" />
 		</View>
 	);
 };
 
-export default CommunicationArea;
+export default PasswordInput;

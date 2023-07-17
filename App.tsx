@@ -3,6 +3,7 @@ import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import DeviceModal from "./src/components/DeviceConnection/DeviceConnectionModal";
 import useBLE from "./src/hooks/useBle";
 import CommunicationArea from "./src/components/CommunicationArea";
+import PasswordInput from "./src/components/PasswordInput";
 
 const App = () => {
 	const {
@@ -39,15 +40,15 @@ const App = () => {
 				backgroundColor: "#1E1E1E",
 			}}
 		>
+			<PasswordInput />
+			<CommunicationArea enabled={false} />
 			<View
 				style={{
 					flex: 1,
 					justifyContent: "center",
 					alignItems: "center",
 				}}
-			>
-				<CommunicationArea />
-			</View>
+			></View>
 			<TouchableOpacity
 				onPress={connectedDevice ? disconnectFromDevice : openModal}
 				style={{
