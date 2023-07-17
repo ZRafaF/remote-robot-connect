@@ -113,13 +113,13 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.remoterobotconnect"
+    namespace 'com.anonymous.remoterobotconnect'
     defaultConfig {
-        applicationId "com.remoterobotconnect"
+        applicationId 'com.anonymous.remoterobotconnect'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
     }
 
     splits {

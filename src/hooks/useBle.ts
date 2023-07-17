@@ -83,6 +83,7 @@ const useBLE = () => {
 				console.log(error);
 			}
 			if (device) {
+				console.log("here");
 				setAllDevices((prevState: Device[]) => {
 					if (!isDuplicteDevice(prevState, device)) {
 						return [...prevState, device];

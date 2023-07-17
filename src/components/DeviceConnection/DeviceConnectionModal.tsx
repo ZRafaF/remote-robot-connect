@@ -9,9 +9,7 @@ import {
 	Modal,
 	SafeAreaView,
 	Text,
-	StyleSheet,
 	TouchableOpacity,
-	Button,
 	View,
 } from "react-native";
 import { Device } from "react-native-ble-plx";
@@ -20,24 +18,27 @@ import DeviceListItem from "./DeviceListItem/DeviceListItem";
 interface DeviceModalProps {
 	devices: Device[];
 	visible: boolean;
-	connectToPeripheral: (device: Device) => void;
+	connectToDevice: (device: Device) => void;
 	closeModal: () => void;
 }
 
-const DeviceModal: FC<DeviceModalProps> = (props) => {
-	const { devices, visible, connectToPeripheral, closeModal } = props;
-
+const DeviceModal: FC<DeviceModalProps> = ({
+	devices,
+	visible,
+	connectToDevice,
+	closeModal,
+}) => {
 	const renderDeviceModalListItem = useCallback(
 		(item: ListRenderItemInfo<Device>) => {
 			return (
 				<DeviceListItem
 					item={item}
-					connectToPeripheral={connectToPeripheral}
+					connectToPeripheral={connectToDevice}
 					closeModal={closeModal}
 				/>
 			);
 		},
-		[closeModal, connectToPeripheral]
+		[closeModal, connectToDevice]
 	);
 
 	return (

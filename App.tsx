@@ -30,7 +30,7 @@ const App = () => {
 	};
 
 	const openModal = async () => {
-		scanForDevices();
+		scanForPeripherals();
 		setIsModalVisible(true);
 	};
 
@@ -78,7 +78,7 @@ const App = () => {
 			<DeviceModal
 				closeModal={hideModal}
 				visible={isModalVisible}
-				connectToPeripheral={connectToDevice}
+				connectToDevice={connectToDevice}
 				devices={allDevices}
 			/>
 		</SafeAreaView>

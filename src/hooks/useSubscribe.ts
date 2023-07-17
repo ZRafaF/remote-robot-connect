@@ -32,6 +32,7 @@ const useSubscribe = (characteristicUUID: string, device: Device | null) => {
 	};
 
 	useEffect(() => {
+		console.log(device);
 		const subscribe = async () => {
 			device
 				?.readCharacteristicForService(SERVICE_UUID, characteristicUUID)

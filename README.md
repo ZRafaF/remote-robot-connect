@@ -11,6 +11,11 @@
 
 You can prebuild the app by running `npx expo prebuild`, this is needed for the BLE
 
+## Building
+
+For build I'm using EAS expo, to create an `.apk` build run:
+`eas build -p android --profile preview`.
+
 ## References
 
 When downloading depedencies use `npx expo install my-library`;

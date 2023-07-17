@@ -1,4 +1,4 @@
-package com.remoterobotconnect;
+package com.anonymous.remoterobotconnect;
 
 import android.os.Build;
 import android.os.Bundle;

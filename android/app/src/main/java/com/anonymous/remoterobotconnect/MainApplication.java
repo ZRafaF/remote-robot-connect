@@ -1,4 +1,4 @@
-package com.remoterobotconnect;
+package com.anonymous.remoterobotconnect;
 
 import android.app.Application;
 import android.content.res.Configuration;
