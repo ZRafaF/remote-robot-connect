@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import {
+	Keyboard,
+	SafeAreaView,
+	Text,
+	TouchableOpacity,
+	TouchableWithoutFeedback,
+	View,
+} from "react-native";
 import DeviceModal from "./src/components/DeviceConnection/DeviceConnectionModal";
 import useBLE from "./src/hooks/useBle";
 import PasswordInput from "./src/components/PasswordInput";
@@ -30,57 +37,66 @@ const App = () => {
 	};
 
 	return (
-		<SafeAreaView
-			style={{
-				flex: 1,
-				backgroundColor: "#1E1E1E",
+		<TouchableWithoutFeedback
+			onPress={() => {
+				Keyboard.dismiss();
 			}}
 		>
-			<PasswordInput
-				passwordString={password}
-				setPasswordString={setPassword}
-			/>
-			<ContentComponent device={connectedDevice} password={password} />
-			<View
+			<SafeAreaView
 				style={{
 					flex: 1,
-					justifyContent: "center",
-					alignItems: "center",
-				}}
-			></View>
-			<TouchableOpacity
-				onPress={() => {
-					trigger("impactLight");
-
-					connectedDevice ? disconnectFromDevice() : openModal();
-				}}
-				style={{
-					backgroundColor: "#007ACC",
-					justifyContent: "center",
-					alignItems: "center",
-					height: 50,
-					marginHorizontal: 40,
-					marginVertical: 10,
-					borderRadius: 8,
+					backgroundColor: "#1E1E1E",
 				}}
 			>
-				<Text
+				<PasswordInput
+					passwordString={password}
+					setPasswordString={setPassword}
+				/>
+				<ContentComponent
+					device={connectedDevice}
+					password={password}
+				/>
+				<View
 					style={{
-						fontSize: 18,
-						fontWeight: "bold",
-						color: "white",
+						flex: 1,
+						justifyContent: "center",
+						alignItems: "center",
+					}}
+				></View>
+				<TouchableOpacity
+					onPress={() => {
+						trigger("impactLight");
+
+						connectedDevice ? disconnectFromDevice() : openModal();
+					}}
+					style={{
+						backgroundColor: "#007ACC",
+						justifyContent: "center",
+						alignItems: "center",
+						height: 50,
+						marginHorizontal: 40,
+						marginVertical: 10,
+						borderRadius: 8,
 					}}
 				>
-					{connectedDevice ? "Desconectar" : "Conectar"}
-				</Text>
-			</TouchableOpacity>
-			<DeviceModal
-				closeModal={hideModal}
-				visible={isModalVisible}
-				connectToDevice={connectToDevice}
-				devices={allDevices}
-			/>
-		</SafeAreaView>
+					<Text
+						style={{
+							fontSize: 18,
+							fontWeight: "bold",
+							color: "white",
+						}}
+					>
+						{connectedDevice ? "Desconectar" : "Conectar"}
+					</Text>
+				</TouchableOpacity>
+				<DeviceModal
+					closeModal={hideModal}
+					visible={isModalVisible}
+					connectToDevice={connectToDevice}
+					devices={allDevices}
+				/>
+			</SafeAreaView>
+		</TouchableWithoutFeedback>
 	);
 };
 

@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { Device } from "react-native-ble-plx";
 import DeviceListItem from "./DeviceListItem/DeviceListItem";
+import { trigger } from "react-native-haptic-feedback";
 
 interface DeviceModalProps {
 	devices: Device[];
@@ -42,6 +43,8 @@ const DeviceModal: FC<DeviceModalProps> = ({
 	);
 
 	const helpAlert = () => {
+		trigger("impactLight");
+
 		alert(
 			"Não encontrou seu periférico?: \n- Verifique as PERMISSÕES do aplicativo\n- Reinicie a conexão do periférico (ESP32)."
 		);
