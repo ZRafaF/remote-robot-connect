@@ -1,4 +1,4 @@
-rootProject.name = 'remote-robot-connect'
+rootProject.name = 'Remote Robot Connect'
 
 apply from: new File(["node", "--print", "require.resolve('expo/package.json')"].execute(null, rootDir).text.trim(), "../scripts/autolinking.gradle");
 useExpoModules()
