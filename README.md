@@ -13,8 +13,16 @@ You can prebuild the app by running `npx expo prebuild`, this is needed for the 
 
 ## Building
 
+### Cloud
+
 For build I'm using EAS expo, to create an `.apk` build run:
 `eas build -p android --profile preview`.
+
+### Local
+
+`npx expo prebuild`
+`cd .\android\`
+`./gradlew assembleDebug` or `./gradlew assembleRelease`
 
 ## References
 

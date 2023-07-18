@@ -12,6 +12,7 @@ import {
 	ColorValue,
 	Keyboard,
 } from "react-native";
+import { trigger } from "react-native-haptic-feedback";
 
 interface CardComponentProps {
 	cardTitle: string;
@@ -27,6 +28,7 @@ const CardComponent: FunctionComponent<CardComponentProps> = ({
 	const [number, onChangeNumber] = useState<string>("");
 
 	const triggerCallBack = () => {
+		trigger("impactLight");
 		cardCallBack(number);
 		Keyboard.dismiss();
 	};

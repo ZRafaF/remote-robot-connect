@@ -9,9 +9,7 @@ import {
 } from "react-native-ble-plx";
 
 import * as ExpoDevice from "expo-device";
-
-const HEART_RATE_UUID = "3e60a07c-235e-11ee-be56-0242ac120002";
-const HEART_RATE_CHARACTERISTIC = "6bf30bea-2392-11ee-be56-0242ac120002";
+import { SERVICE_UUID } from "../helper/bleHelper";
 
 const useBLE = () => {
 	const bleManager = useMemo(() => new BleManager(), []);
@@ -78,12 +76,11 @@ const useBLE = () => {
 		devices.findIndex((device) => nextDevice.id === device.id) > -1;
 
 	const scanForPeripherals = () =>
-		bleManager.startDeviceScan([HEART_RATE_UUID], null, (error, device) => {
+		bleManager.startDeviceScan([SERVICE_UUID], null, (error, device) => {
 			if (error) {
 				console.log(error);
 			}
 			if (device) {
-				console.log("here");
 				setAllDevices((prevState: Device[]) => {
 					if (!isDuplicteDevice(prevState, device)) {
 						return [...prevState, device];

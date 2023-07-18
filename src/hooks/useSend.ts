@@ -10,14 +10,24 @@ import { SERVICE_UUID } from "../helper/bleHelper";
 const useSend = (
 	characteristicUUID: string,
 	device: Device | null,
-	password: string
+	password: string,
+	updateFunc?: () => void
 ) => {
 	const send = (data: string) => {
-		device?.writeCharacteristicWithResponseForService(
-			SERVICE_UUID,
-			characteristicUUID,
-			base64.encode(password + data)
-		);
+		if (password.length === 0) {
+			alert("Sua senha está vazia, isso está correto?");
+		}
+		device
+			?.writeCharacteristicWithResponseForService(
+				SERVICE_UUID,
+				characteristicUUID,
+				base64.encode(password + data)
+			)
+			.then(() => {
+				if (updateFunc) {
+					setTimeout(updateFunc, 200); // 200 ms delay to force update
+				}
+			});
 	};
 	return [send] as const;
 };

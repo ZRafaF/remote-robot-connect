@@ -4,6 +4,7 @@ import DeviceModal from "./src/components/DeviceConnection/DeviceConnectionModal
 import useBLE from "./src/hooks/useBle";
 import PasswordInput from "./src/components/PasswordInput";
 import ContentComponent from "./src/components/ContentComponent/ContentComponent";
+import { trigger } from "react-native-haptic-feedback";
 
 const App = () => {
 	const [
@@ -18,15 +19,9 @@ const App = () => {
 
 	const [password, setPassword] = useState<string>("");
 
-	const scanForDevices = async () => {
-		const isPermissionsEnabled = await requestPermissions();
-		if (isPermissionsEnabled) {
-			scanForPeripherals();
-		}
-	};
-
 	const hideModal = () => {
 		setIsModalVisible(false);
+		trigger("impactLight");
 	};
 
 	const openModal = async () => {
@@ -54,7 +49,11 @@ const App = () => {
 				}}
 			></View>
 			<TouchableOpacity
-				onPress={connectedDevice ? disconnectFromDevice : openModal}
+				onPress={() => {
+					trigger("impactLight");
+
+					connectedDevice ? disconnectFromDevice() : openModal();
+				}}
 				style={{
 					backgroundColor: "#007ACC",
 					justifyContent: "center",
@@ -72,7 +71,7 @@ const App = () => {
 						color: "white",
 					}}
 				>
-					{connectedDevice ? "Disconnect" : "Connect"}
+					{connectedDevice ? "Desconectar" : "Conectar"}
 				</Text>
 			</TouchableOpacity>
 			<DeviceModal

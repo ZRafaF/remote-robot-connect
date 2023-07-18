@@ -24,29 +24,28 @@ const useSubscribe = (characteristicUUID: string, device: Device | null) => {
 			return -1;
 		}
 
-		console.log(characteristic.value);
-
 		const rawData = base64.decode(characteristic.value);
 
 		setValue(rawData);
 	};
+	const update = () => {
+		device
+			?.readCharacteristicForService(SERVICE_UUID, characteristicUUID)
+			.then((characteristic: Characteristic | null) => {
+				if (!characteristic?.value) {
+					console.log("No Data was recieved");
+					return;
+				}
+				const rawData = base64.decode(characteristic.value);
+
+				setValue(rawData);
+			});
+	};
 
 	useEffect(() => {
-		console.log(device);
 		const subscribe = async () => {
-			device
-				?.readCharacteristicForService(SERVICE_UUID, characteristicUUID)
-				.then((characteristic: Characteristic | null) => {
-					if (!characteristic?.value) {
-						console.log("No Data was recieved");
-						return;
-					}
-					const rawData = base64.decode(characteristic.value);
-
-					setValue(rawData);
-				});
-
 			if (device) {
+				update();
 				device.monitorCharacteristicForService(
 					SERVICE_UUID,
 					characteristicUUID,
@@ -59,7 +58,7 @@ const useSubscribe = (characteristicUUID: string, device: Device | null) => {
 		if (device) subscribe();
 	}, [device]);
 
-	return [value] as const;
+	return [value, update] as const;
 };
 
 export default useSubscribe;

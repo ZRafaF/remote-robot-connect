@@ -41,6 +41,12 @@ const DeviceModal: FC<DeviceModalProps> = ({
 		[closeModal, connectToDevice]
 	);
 
+	const helpAlert = () => {
+		alert(
+			"Não encontrou seu periférico?: \n- Verifique as PERMISSÕES do aplicativo\n- Reinicie a conexão do periférico (ESP32)."
+		);
+	};
+
 	return (
 		<Modal
 			animationType="slide"
@@ -64,6 +70,26 @@ const DeviceModal: FC<DeviceModalProps> = ({
 						alignItems: "center",
 					}}
 				>
+					<TouchableOpacity
+						onPress={helpAlert}
+						style={{
+							width: 50,
+							backgroundColor: "#FFFFFF",
+							justifyContent: "center",
+							alignItems: "center",
+							height: 50,
+							borderRadius: 8,
+						}}
+					>
+						<Text
+							style={{
+								fontSize: 15,
+								fontWeight: "bold",
+							}}
+						>
+							?
+						</Text>
+					</TouchableOpacity>
 					<Text
 						style={{
 							flex: 1,
@@ -79,8 +105,7 @@ const DeviceModal: FC<DeviceModalProps> = ({
 					<TouchableOpacity
 						onPress={closeModal}
 						style={{
-							flex: 1,
-							maxWidth: 150,
+							width: 100,
 
 							backgroundColor: "#007ACC",
 							justifyContent: "center",

@@ -11,6 +11,7 @@ import {
 	TouchableOpacity,
 } from "react-native";
 import { Device } from "react-native-ble-plx";
+import { trigger } from "react-native-haptic-feedback";
 
 interface DeviceListItemProps {
 	item: ListRenderItemInfo<Device>;
@@ -22,6 +23,8 @@ const DeviceListItem: FunctionComponent<DeviceListItemProps> = (props) => {
 	const { item, connectToPeripheral, closeModal } = props;
 
 	const connectAndCloseModal = useCallback(() => {
+		trigger("impactLight");
+
 		connectToPeripheral(item.item);
 		closeModal();
 	}, [closeModal, connectToPeripheral, item.item]);

@@ -4,10 +4,9 @@
 // https://opensource.org/licenses/MIT
 
 import { FunctionComponent } from "react";
-import { Text, View } from "react-native";
+import { Button, TouchableOpacity, View, Text } from "react-native";
 import ExtraComponent from "./ExtraComponent/ExtraComponent";
 import PidComponent from "./PidComponent/PidComponent";
-import useSubscribe from "../../hooks/useSubscribe";
 import {
 	D_GET_CHARACTERISTIC,
 	D_SET_CHARACTERISTIC,
@@ -20,6 +19,8 @@ import {
 } from "../../helper/bleHelper";
 import { Device } from "react-native-ble-plx";
 import useSend from "../../hooks/useSend";
+import useSubscribe from "../../hooks/useSubscribe";
+import { trigger } from "react-native-haptic-feedback";
 
 interface ContentComponentProps {
 	device: Device | null;
@@ -30,15 +31,32 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 	device,
 	password,
 }) => {
-	const [pValue] = useSubscribe(P_GET_CHARACTERISTIC, device);
-	const [iValue] = useSubscribe(I_GET_CHARACTERISTIC, device);
-	const [dValue] = useSubscribe(D_GET_CHARACTERISTIC, device);
-	const [extraValue] = useSubscribe(EXTRA_GET_CHARACTERISTIC, device);
+	const [pValue, pUpdate] = useSubscribe(P_GET_CHARACTERISTIC, device);
+	const [iValue, iUpdate] = useSubscribe(I_GET_CHARACTERISTIC, device);
+	const [dValue, dUpdate] = useSubscribe(D_GET_CHARACTERISTIC, device);
+	const [extraValue, extraUpdate] = useSubscribe(
+		EXTRA_GET_CHARACTERISTIC,
+		device
+	);
 
-	const [sendP] = useSend(P_SET_CHARACTERISTIC, device, password);
-	const [sendI] = useSend(I_SET_CHARACTERISTIC, device, password);
-	const [sendD] = useSend(D_SET_CHARACTERISTIC, device, password);
-	const [sendExtra] = useSend(EXTRA_SET_CHARACTERISTIC, device, password);
+	const [sendP] = useSend(P_SET_CHARACTERISTIC, device, password, pUpdate);
+	const [sendI] = useSend(I_SET_CHARACTERISTIC, device, password, iUpdate);
+	const [sendD] = useSend(D_SET_CHARACTERISTIC, device, password, dUpdate);
+	const [sendExtra] = useSend(
+		EXTRA_SET_CHARACTERISTIC,
+		device,
+		password,
+		extraUpdate
+	);
+
+	const updateAll = () => {
+		trigger("impactLight");
+
+		pUpdate();
+		iUpdate();
+		dUpdate();
+		extraUpdate();
+	};
 
 	return (
 		<View
@@ -46,8 +64,30 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 			style={{
 				opacity: device ? 1 : 0.2,
 				padding: 20,
+				justifyContent: "center",
 			}}
 		>
+			<TouchableOpacity
+				onPress={updateAll}
+				style={{
+					marginHorizontal: 50,
+					backgroundColor: "#FFDF63",
+					justifyContent: "center",
+					alignItems: "center",
+					height: 50,
+					borderRadius: 8,
+				}}
+			>
+				<Text
+					style={{
+						fontSize: 15,
+						fontWeight: "bold",
+					}}
+				>
+					FORÇAR ATUALIZAÇÃO
+				</Text>
+			</TouchableOpacity>
+
 			<PidComponent
 				pValue={pValue}
 				iValue={iValue}
