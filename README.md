@@ -20,9 +20,11 @@ For build I'm using EAS expo, to create an `.apk` build run:
 
 ### Local
 
-`npx expo prebuild`
-`cd .\android\`
-`./gradlew assembleDebug` or `./gradlew assembleRelease`
+1. `npx expo prebuild`
+2. `cd .\android\`
+3. `./gradlew assembleDebug` or `./gradlew assembleRelease`
+
+The output is located at `remote-robot-connect\android\app\build\outputs\apk`
 
 ## References
 
