@@ -6,7 +6,7 @@
 import { FunctionComponent } from "react";
 
 import { Text, View } from "react-native";
-import CardComponent from "./CardComponent";
+import CardComponent from "../CardComponent";
 
 interface PidComponentProps {
 	pValue: string;
@@ -104,6 +104,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 				}}
 				cardTitle="P"
 				defaultColor="red"
+				buttonColor="red"
 			/>
 			<CardComponent
 				cardCallBack={(value: string) => {
@@ -111,6 +112,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 				}}
 				cardTitle="I"
 				defaultColor="green"
+				buttonColor="green"
 			/>
 			<CardComponent
 				cardCallBack={(value: string) => {
@@ -118,6 +120,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 				}}
 				cardTitle="D"
 				defaultColor="blue"
+				buttonColor="blue"
 			/>
 		</View>
 	);

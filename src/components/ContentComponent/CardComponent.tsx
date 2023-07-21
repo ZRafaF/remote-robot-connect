@@ -15,7 +15,7 @@ import {
 import { trigger } from "react-native-haptic-feedback";
 
 interface CardComponentProps {
-	cardTitle: string;
+	cardTitle?: string;
 	cardCallBack: (value: string) => void;
 	defaultColor?: ColorValue;
 	buttonColor?: ColorValue;
@@ -25,6 +25,7 @@ const CardComponent: FunctionComponent<CardComponentProps> = ({
 	cardTitle,
 	cardCallBack,
 	defaultColor = "white",
+	buttonColor = "black",
 }) => {
 	const [number, onChangeNumber] = useState<string>("");
 
@@ -87,7 +88,7 @@ const CardComponent: FunctionComponent<CardComponentProps> = ({
 			/>
 			<Button
 				title="ENVIAR"
-				color={defaultColor}
+				color={buttonColor}
 				onPress={triggerCallBack}
 			/>
 		</View>

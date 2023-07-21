@@ -99,6 +99,9 @@ const useBLE = () => {
 					.then((discDev) => {
 						setConnectedDevice(discDev);
 					})
+					.then(() => {
+						bleManager.stopDeviceScan();
+					})
 					.catch((error) => {
 						console.error(error);
 					});

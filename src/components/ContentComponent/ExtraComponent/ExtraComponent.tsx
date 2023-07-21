@@ -6,17 +6,19 @@
 import { FunctionComponent } from "react";
 
 import { Text, View } from "react-native";
-import CardComponent from "./CardComponent";
+import CardComponent from "../CardComponent";
+import ActionArea from "./ActionArea/ActionArea";
 
 interface ExtraComponentProps {
 	extraValue: string;
-
 	sendExtra: (data: string) => void;
+	sendAction: (data: string) => void;
 }
 
 const ExtraComponent: FunctionComponent<ExtraComponentProps> = ({
 	extraValue,
 	sendExtra,
+	sendAction,
 }) => {
 	return (
 		<View
@@ -88,8 +90,9 @@ const ExtraComponent: FunctionComponent<ExtraComponentProps> = ({
 				cardCallBack={(value: string) => {
 					sendExtra(value);
 				}}
-				cardTitle="EXTRA"
+				buttonColor={"grey"}
 			/>
+			<ActionArea sendAction={sendAction} />
 		</View>
 	);
 };

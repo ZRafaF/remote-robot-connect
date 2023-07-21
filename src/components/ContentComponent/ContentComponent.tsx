@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import { Button, TouchableOpacity, View, Text } from "react-native";
 import ExtraComponent from "./ExtraComponent/ExtraComponent";
 import PidComponent from "./PidComponent/PidComponent";
@@ -50,7 +50,7 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 		extraUpdate
 	);
 
-	const [sendCallback] = useSend(
+	const [sendAction] = useSend(
 		CALLBACK_IDX_SET_CHARACTERISTIC,
 		device,
 		password,
@@ -59,7 +59,6 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 
 	const updateAll = () => {
 		trigger("impactLight");
-
 		pUpdate();
 		iUpdate();
 		dUpdate();
@@ -72,7 +71,7 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 			style={{
 				opacity: device ? 1 : 0.2,
 				padding: 20,
-				justifyContent: "center",
+				overflow: "scroll",
 			}}
 		>
 			<TouchableOpacity
@@ -104,12 +103,10 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 				sendI={sendI}
 				sendD={sendD}
 			/>
-			<ExtraComponent extraValue={extraValue} sendExtra={sendExtra} />
-			<Button
-				title="Call 0"
-				onPress={() => {
-					sendCallback("0");
-				}}
+			<ExtraComponent
+				extraValue={extraValue}
+				sendExtra={sendExtra}
+				sendAction={sendAction}
 			/>
 		</View>
 	);
