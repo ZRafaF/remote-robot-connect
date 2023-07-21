@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import {
 	Keyboard,
 	SafeAreaView,
+	ScrollView,
 	Text,
 	TouchableOpacity,
 	TouchableWithoutFeedback,
 	View,
+	Pressable,
 } from "react-native";
 import DeviceModal from "./src/components/DeviceConnection/DeviceConnectionModal";
 import useBLE from "./src/hooks/useBle";
@@ -52,10 +54,14 @@ const App = () => {
 					passwordString={password}
 					setPasswordString={setPassword}
 				/>
-				<ContentComponent
-					device={connectedDevice}
-					password={password}
-				/>
+				<ScrollView>
+					<Pressable>
+						<ContentComponent
+							device={connectedDevice}
+							password={password}
+						/>
+					</Pressable>
+				</ScrollView>
 				<View
 					style={{
 						flex: 1,

@@ -15,22 +15,44 @@ import {
 import { trigger } from "react-native-haptic-feedback";
 
 interface CardComponentProps {
-	cardTitle: string;
+	cardTitle?: string;
 	cardCallBack: (value: string) => void;
+	defaultColor?: ColorValue;
+	buttonColor?: ColorValue;
 }
 
 const CardComponent: FunctionComponent<CardComponentProps> = ({
 	cardTitle,
 	cardCallBack,
+	defaultColor = "white",
+	buttonColor = "black",
 }) => {
-	const [number, onChangeNumber] = useState("");
+	const [number, onChangeNumber] = useState<string>("");
 
 	const triggerCallBack = () => {
 		trigger("impactLight");
-
 		cardCallBack(number);
 		Keyboard.dismiss();
 	};
+
+	const getText = (): JSX.Element => {
+		return cardTitle ? (
+			<Text
+				style={{
+					fontSize: 20,
+					width: 30,
+					fontWeight: "bold",
+
+					color: defaultColor,
+				}}
+			>
+				{cardTitle}
+			</Text>
+		) : (
+			<></>
+		);
+	};
+
 	return (
 		<View
 			style={{
@@ -44,12 +66,14 @@ const CardComponent: FunctionComponent<CardComponentProps> = ({
 				borderRadius: 8,
 			}}
 		>
+			{getText()}
+
 			<TextInput
 				style={{
 					flex: 1,
 					height: 40,
+					maxWidth: 150,
 					borderWidth: 1,
-					marginRight: 30,
 					padding: 10,
 					color: "white",
 					borderColor: "grey",
@@ -60,8 +84,13 @@ const CardComponent: FunctionComponent<CardComponentProps> = ({
 				onChangeText={onChangeNumber}
 				value={number}
 				placeholder="Novo valor"
+				keyboardType="numeric"
 			/>
-			<Button title="ENVIAR" color="#3E3E42" onPress={triggerCallBack} />
+			<Button
+				title="ENVIAR"
+				color={buttonColor}
+				onPress={triggerCallBack}
+			/>
 		</View>
 	);
 };
