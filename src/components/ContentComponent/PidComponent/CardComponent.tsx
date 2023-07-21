@@ -18,6 +18,7 @@ interface CardComponentProps {
 	cardTitle: string;
 	cardCallBack: (value: string) => void;
 	defaultColor?: ColorValue;
+	buttonColor?: ColorValue;
 }
 
 const CardComponent: FunctionComponent<CardComponentProps> = ({
@@ -33,6 +34,24 @@ const CardComponent: FunctionComponent<CardComponentProps> = ({
 		Keyboard.dismiss();
 	};
 
+	const getText = (): JSX.Element => {
+		return cardTitle ? (
+			<Text
+				style={{
+					fontSize: 20,
+					width: 30,
+					fontWeight: "bold",
+
+					color: defaultColor,
+				}}
+			>
+				{cardTitle}
+			</Text>
+		) : (
+			<></>
+		);
+	};
+
 	return (
 		<View
 			style={{
@@ -46,17 +65,7 @@ const CardComponent: FunctionComponent<CardComponentProps> = ({
 				borderRadius: 8,
 			}}
 		>
-			<Text
-				style={{
-					fontSize: 20,
-					width: 30,
-					fontWeight: "bold",
-
-					color: defaultColor,
-				}}
-			>
-				{cardTitle}
-			</Text>
+			{getText()}
 
 			<TextInput
 				style={{

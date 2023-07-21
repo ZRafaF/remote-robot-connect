@@ -8,6 +8,7 @@ import { Button, TouchableOpacity, View, Text } from "react-native";
 import ExtraComponent from "./ExtraComponent/ExtraComponent";
 import PidComponent from "./PidComponent/PidComponent";
 import {
+	CALLBACK_IDX_SET_CHARACTERISTIC,
 	D_GET_CHARACTERISTIC,
 	D_SET_CHARACTERISTIC,
 	EXTRA_GET_CHARACTERISTIC,
@@ -47,6 +48,13 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 		device,
 		password,
 		extraUpdate
+	);
+
+	const [sendCallback] = useSend(
+		CALLBACK_IDX_SET_CHARACTERISTIC,
+		device,
+		password,
+		dUpdate
 	);
 
 	const updateAll = () => {
@@ -97,6 +105,12 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 				sendD={sendD}
 			/>
 			<ExtraComponent extraValue={extraValue} sendExtra={sendExtra} />
+			<Button
+				title="Call 0"
+				onPress={() => {
+					sendCallback("0");
+				}}
+			/>
 		</View>
 	);
 };
