@@ -9,6 +9,4 @@ type PidType = {
 	d: number;
 };
 
-type PidResponse = {
-	pid: Array<[number, number, number]>;
-};
+type PidResponse = Array<[number, number, number]>;

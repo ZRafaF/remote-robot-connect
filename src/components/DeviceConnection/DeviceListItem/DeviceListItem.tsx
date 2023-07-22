@@ -23,7 +23,9 @@ const DeviceListItem: FunctionComponent<DeviceListItemProps> = (props) => {
 	const { item, connectToPeripheral, closeModal } = props;
 
 	const connectAndCloseModal = useCallback(() => {
-		trigger("impactLight");
+		try {
+			trigger("impactLight");
+		} catch (error) {}
 
 		connectToPeripheral(item.item);
 		closeModal();

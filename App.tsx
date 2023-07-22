@@ -30,7 +30,9 @@ const App = () => {
 
 	const hideModal = () => {
 		setIsModalVisible(false);
-		trigger("impactLight");
+		try {
+			trigger("impactLight");
+		} catch (error) {}
 	};
 
 	const openModal = async () => {
@@ -71,7 +73,9 @@ const App = () => {
 				></View>
 				<TouchableOpacity
 					onPress={() => {
-						trigger("impactLight");
+						try {
+							trigger("impactLight");
+						} catch (error) {}
 
 						connectedDevice ? disconnectFromDevice() : openModal();
 					}}

@@ -33,26 +33,33 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 			alert("Não foi possível enviar a mensagem");
 			return;
 		}
-		let sendObject: PidResponse = {
-			pid: [...pidParsed.pid],
-		};
+		let sendObject: PidResponse = [...pidParsed];
+		console.log("pidParsed" + pidParsed);
 
 		try {
 			if (pValue) {
-				sendObject.pid[idx][0] = parseFloat(pValue);
+				sendObject[idx][0] = parseFloat(pValue);
 			}
 			if (iValue) {
-				sendObject.pid[idx][1] = parseFloat(pValue);
+				sendObject[idx][1] = parseFloat(iValue);
 			}
 			if (dValue) {
-				sendObject.pid[idx][2] = parseFloat(pValue);
+				sendObject[idx][2] = parseFloat(dValue);
 			}
 
-			sendPid('{"pid": [[1,1,1],[1,1,1]]}');
-			console.log(sendObject);
+			sendPid(JSON.stringify(sendObject));
+			console.log("send" + sendObject);
 		} catch (error) {
 			console.error(error);
 			alert("something went wrong");
+		}
+	};
+
+	const getPidValueAt = (index: number) => {
+		try {
+			return pidParsed ? pidParsed[idx][index] : "";
+		} catch (error) {
+			return "";
 		}
 	};
 
@@ -105,7 +112,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 							color: "red",
 						}}
 					>
-						P: {}
+						P: {getPidValueAt(0)}
 					</Text>
 					<Text
 						style={{
@@ -114,7 +121,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 							color: "green",
 						}}
 					>
-						I: {}
+						I: {getPidValueAt(1)}
 					</Text>
 					<Text
 						style={{
@@ -123,7 +130,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 							color: "blue",
 						}}
 					>
-						D: {}
+						D: {getPidValueAt(2)}
 					</Text>
 				</View>
 			</View>

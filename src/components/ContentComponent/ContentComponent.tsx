@@ -66,7 +66,9 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 	);
 
 	const updateAll = () => {
-		trigger("impactLight");
+		try {
+			trigger("impactLight");
+		} catch (error) {}
 		pidUpdate();
 		numOfPidsUpdate();
 		numOfFunctionsUpdate();
@@ -74,6 +76,7 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 	};
 
 	const makePidComponents = () => {
+		console.log(numOfPids);
 		return [...Array(parseInt(numOfPids ? numOfPids : "0"))].map(
 			(element, idx) => (
 				<PidComponent

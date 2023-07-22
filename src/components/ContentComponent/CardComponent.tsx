@@ -30,7 +30,6 @@ const CardComponent: FunctionComponent<CardComponentProps> = ({
 	const [number, onChangeNumber] = useState<string>("");
 
 	const triggerCallBack = () => {
-		trigger("impactLight");
 		cardCallBack(number);
 		Keyboard.dismiss();
 	};
