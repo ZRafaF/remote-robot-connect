@@ -9,10 +9,12 @@ import ExtraComponent from "./ExtraComponent/ExtraComponent";
 import PidComponent from "./PidComponent/PidComponent";
 import {
 	CALLBACK_IDX_SET_CHARACTERISTIC,
+	CALLBACK_SIZE_GET_CHARACTERISTIC,
 	EXTRA_GET_CHARACTERISTIC,
 	EXTRA_SET_CHARACTERISTIC,
 	PID_GET_CHARACTERISTIC,
 	PID_SET_CHARACTERISTIC,
+	PID_SIZE_GET_CHARACTERISTIC,
 } from "../../helper/bleHelper";
 import { Device } from "react-native-ble-plx";
 import useSend from "../../hooks/useSend";
@@ -29,6 +31,15 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 	password,
 }) => {
 	const [pidValue, pidUpdate] = useSubscribe(PID_GET_CHARACTERISTIC, device);
+	const [numOfPids, numOfPidsUpdate] = useSubscribe(
+		PID_SIZE_GET_CHARACTERISTIC,
+		device
+	);
+	const [numOfFunctions, numOfFunctionsUpdate] = useSubscribe(
+		CALLBACK_SIZE_GET_CHARACTERISTIC,
+		device
+	);
+
 	const [extraValue, extraUpdate] = useSubscribe(
 		EXTRA_GET_CHARACTERISTIC,
 		device
@@ -57,9 +68,23 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 	const updateAll = () => {
 		trigger("impactLight");
 		pidUpdate();
+		numOfPidsUpdate();
+		numOfFunctionsUpdate();
 		extraUpdate();
 	};
 
+	const makePidComponents = () => {
+		return [...Array(parseInt(numOfPids ? numOfPids : "0"))].map(
+			(element, idx) => (
+				<PidComponent
+					pidValue={pidValue}
+					sendPid={sendPid}
+					idx={idx}
+					key={"pid-component" + idx}
+				/>
+			)
+		);
+	};
 	return (
 		<View
 			pointerEvents={device ? "auto" : "none"}
@@ -89,10 +114,10 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 					FORÇAR ATUALIZAÇÃO
 				</Text>
 			</TouchableOpacity>
-
-			<PidComponent pidValue={pidValue} sendPid={sendPid} />
+			{makePidComponents()}
 			<ExtraComponent
 				extraValue={extraValue}
+				numOfFunc={parseInt(numOfFunctions ? numOfFunctions : "0")}
 				sendExtra={sendExtra}
 				sendAction={sendAction}
 			/>
