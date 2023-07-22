@@ -10,13 +10,15 @@ import ActionButton from "./ActionButton/ActionButton";
 
 interface ActionAreaProps {
 	sendAction: (data: string) => void;
+	numOfFunc: number;
 }
 
-const ActionArea: FunctionComponent<ActionAreaProps> = ({ sendAction }) => {
-	const [numOfActions, setNumOfActions] = useState<number>(0);
-
+const ActionArea: FunctionComponent<ActionAreaProps> = ({
+	sendAction,
+	numOfFunc,
+}) => {
 	const makeActionButtons = () => {
-		return [...Array(numOfActions)].map((element, idx) => (
+		return [...Array(numOfFunc)].map((element, idx) => (
 			<ActionButton
 				action={idx}
 				sendAction={sendAction}
@@ -39,7 +41,6 @@ const ActionArea: FunctionComponent<ActionAreaProps> = ({ sendAction }) => {
 			}}
 		>
 			{makeActionButtons()}
-			<ActionAdderAndRemover setNumOfActions={setNumOfActions} />
 		</View>
 	);
 };

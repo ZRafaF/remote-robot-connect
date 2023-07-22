@@ -43,7 +43,9 @@ const DeviceModal: FC<DeviceModalProps> = ({
 	);
 
 	const helpAlert = () => {
-		trigger("impactLight");
+		try {
+			trigger("impactLight");
+		} catch (error) {}
 
 		alert(
 			"Não encontrou seu periférico?: \n- Verifique as PERMISSÕES do aplicativo\n- Reinicie a conexão do periférico (ESP32)."

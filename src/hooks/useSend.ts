@@ -6,6 +6,7 @@
 import { Device } from "react-native-ble-plx";
 import base64 from "react-native-base64";
 import { SERVICE_UUID } from "../helper/bleHelper";
+import { trigger } from "react-native-haptic-feedback";
 
 const useSend = (
 	characteristicUUID: string,
@@ -27,6 +28,9 @@ const useSend = (
 				if (updateFunc) {
 					setTimeout(updateFunc, 200); // 200 ms delay to force update
 				}
+				try {
+					trigger("impactLight");
+				} catch (error) {}
 			});
 	};
 	return [send] as const;

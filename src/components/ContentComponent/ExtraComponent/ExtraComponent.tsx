@@ -13,12 +13,14 @@ interface ExtraComponentProps {
 	extraValue: string;
 	sendExtra: (data: string) => void;
 	sendAction: (data: string) => void;
+	numOfFunc: number;
 }
 
 const ExtraComponent: FunctionComponent<ExtraComponentProps> = ({
 	extraValue,
 	sendExtra,
 	sendAction,
+	numOfFunc,
 }) => {
 	return (
 		<View
@@ -92,7 +94,7 @@ const ExtraComponent: FunctionComponent<ExtraComponentProps> = ({
 				}}
 				buttonColor={"grey"}
 			/>
-			<ActionArea sendAction={sendAction} />
+			<ActionArea sendAction={sendAction} numOfFunc={numOfFunc} />
 		</View>
 	);
 };

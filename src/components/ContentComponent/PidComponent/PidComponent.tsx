@@ -3,29 +3,66 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { FunctionComponent } from "react";
+import { FunctionComponent, useMemo, useState } from "react";
 
-import { Text, View } from "react-native";
-import CardComponent from "../CardComponent";
+import { Text, TextInput, View, Button } from "react-native";
 
 interface PidComponentProps {
-	pValue: string;
-	iValue: string;
-	dValue: string;
-
-	sendP: (data: string) => void;
-	sendI: (data: string) => void;
-	sendD: (data: string) => void;
+	pidValue: string;
+	sendPid: (data: string) => void;
+	idx: number;
 }
 
 const PidComponent: FunctionComponent<PidComponentProps> = ({
-	pValue,
-	iValue,
-	dValue,
-	sendP,
-	sendI,
-	sendD,
+	pidValue,
+	sendPid,
+	idx,
 }) => {
+	const [pValue, setPValue] = useState<string>("");
+	const [iValue, setIValue] = useState<string>("");
+	const [dValue, setDValue] = useState<string>("");
+
+	const pidParsed: PidResponse | undefined = useMemo(() => {
+		try {
+			return JSON.parse(pidValue);
+		} catch (error) {}
+	}, [pidValue]);
+
+	const serializeAndSend = () => {
+		if (pidParsed === undefined) {
+			alert("Não foi possível enviar a mensagem");
+			return;
+		}
+		let sendObject: PidResponse = [...pidParsed];
+		console.log("pidParsed" + pidParsed);
+
+		try {
+			if (pValue) {
+				sendObject[idx][0] = parseFloat(pValue);
+			}
+			if (iValue) {
+				sendObject[idx][1] = parseFloat(iValue);
+			}
+			if (dValue) {
+				sendObject[idx][2] = parseFloat(dValue);
+			}
+
+			sendPid(JSON.stringify(sendObject));
+			console.log("send" + sendObject);
+		} catch (error) {
+			console.error(error);
+			alert("something went wrong");
+		}
+	};
+
+	const getPidValueAt = (index: number) => {
+		try {
+			return pidParsed ? pidParsed[idx][index] : "";
+		} catch (error) {
+			return "";
+		}
+	};
+
 	return (
 		<View
 			style={{
@@ -55,7 +92,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 						color: "white",
 					}}
 				>
-					PID
+					PID {idx}
 				</Text>
 				<View
 					style={{
@@ -75,7 +112,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 							color: "red",
 						}}
 					>
-						P: {parseFloat(pValue).toFixed(3)}
+						P: {getPidValueAt(0)}
 					</Text>
 					<Text
 						style={{
@@ -84,7 +121,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 							color: "green",
 						}}
 					>
-						I: {parseFloat(iValue).toFixed(3)}
+						I: {getPidValueAt(1)}
 					</Text>
 					<Text
 						style={{
@@ -93,35 +130,140 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 							color: "blue",
 						}}
 					>
-						D: {parseFloat(dValue).toFixed(3)}
+						D: {getPidValueAt(2)}
 					</Text>
 				</View>
 			</View>
+			<View
+				style={{
+					alignSelf: "stretch",
+					flexDirection: "row",
+					padding: 13,
+					marginVertical: 5,
 
-			<CardComponent
-				cardCallBack={(value: string) => {
-					sendP(value);
+					backgroundColor: "#252526",
+					justifyContent: "space-around",
+					alignItems: "center",
+					borderRadius: 8,
 				}}
-				cardTitle="P"
-				defaultColor="red"
-				buttonColor="red"
-			/>
-			<CardComponent
-				cardCallBack={(value: string) => {
-					sendI(value);
+			>
+				<Text
+					style={{
+						fontSize: 20,
+						width: 30,
+						fontWeight: "bold",
+
+						color: "red",
+					}}
+				>
+					P
+				</Text>
+				<TextInput
+					style={{
+						flex: 1,
+						height: 40,
+						maxWidth: 150,
+						borderWidth: 1,
+						padding: 10,
+						color: "white",
+						borderColor: "grey",
+						borderRadius: 8,
+					}}
+					onSubmitEditing={() => {}}
+					placeholderTextColor={"grey"}
+					onChangeText={setPValue}
+					value={pValue}
+					placeholder="Novo valor"
+					keyboardType="numeric"
+				/>
+			</View>
+			<View
+				style={{
+					alignSelf: "stretch",
+					flexDirection: "row",
+					padding: 13,
+					marginVertical: 5,
+
+					backgroundColor: "#252526",
+					justifyContent: "space-around",
+					alignItems: "center",
+					borderRadius: 8,
 				}}
-				cardTitle="I"
-				defaultColor="green"
-				buttonColor="green"
-			/>
-			<CardComponent
-				cardCallBack={(value: string) => {
-					sendD(value);
+			>
+				<Text
+					style={{
+						fontSize: 20,
+						width: 30,
+						fontWeight: "bold",
+
+						color: "green",
+					}}
+				>
+					I
+				</Text>
+				<TextInput
+					style={{
+						flex: 1,
+						height: 40,
+						maxWidth: 150,
+						borderWidth: 1,
+						padding: 10,
+						color: "white",
+						borderColor: "grey",
+						borderRadius: 8,
+					}}
+					onSubmitEditing={() => {}}
+					placeholderTextColor={"grey"}
+					onChangeText={setIValue}
+					value={iValue}
+					placeholder="Novo valor"
+					keyboardType="numeric"
+				/>
+			</View>
+			<View
+				style={{
+					alignSelf: "stretch",
+					flexDirection: "row",
+					padding: 13,
+					marginVertical: 5,
+
+					backgroundColor: "#252526",
+					justifyContent: "space-around",
+					alignItems: "center",
+					borderRadius: 8,
 				}}
-				cardTitle="D"
-				defaultColor="blue"
-				buttonColor="blue"
-			/>
+			>
+				<Text
+					style={{
+						fontSize: 20,
+						width: 30,
+						fontWeight: "bold",
+
+						color: "blue",
+					}}
+				>
+					D
+				</Text>
+				<TextInput
+					style={{
+						flex: 1,
+						height: 40,
+						maxWidth: 150,
+						borderWidth: 1,
+						padding: 10,
+						color: "white",
+						borderColor: "grey",
+						borderRadius: 8,
+					}}
+					onSubmitEditing={() => {}}
+					placeholderTextColor={"grey"}
+					onChangeText={setDValue}
+					value={dValue}
+					placeholder="Novo valor"
+					keyboardType="numeric"
+				/>
+			</View>
+			<Button title="ENVIAR" onPress={serializeAndSend} />
 		</View>
 	);
 };

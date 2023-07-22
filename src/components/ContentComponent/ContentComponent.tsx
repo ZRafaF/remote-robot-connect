@@ -9,14 +9,12 @@ import ExtraComponent from "./ExtraComponent/ExtraComponent";
 import PidComponent from "./PidComponent/PidComponent";
 import {
 	CALLBACK_IDX_SET_CHARACTERISTIC,
-	D_GET_CHARACTERISTIC,
-	D_SET_CHARACTERISTIC,
+	CALLBACK_SIZE_GET_CHARACTERISTIC,
 	EXTRA_GET_CHARACTERISTIC,
 	EXTRA_SET_CHARACTERISTIC,
-	I_GET_CHARACTERISTIC,
-	I_SET_CHARACTERISTIC,
-	P_GET_CHARACTERISTIC,
-	P_SET_CHARACTERISTIC,
+	PID_GET_CHARACTERISTIC,
+	PID_SET_CHARACTERISTIC,
+	PID_SIZE_GET_CHARACTERISTIC,
 } from "../../helper/bleHelper";
 import { Device } from "react-native-ble-plx";
 import useSend from "../../hooks/useSend";
@@ -32,17 +30,27 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 	device,
 	password,
 }) => {
-	const [pValue, pUpdate] = useSubscribe(P_GET_CHARACTERISTIC, device);
-	const [iValue, iUpdate] = useSubscribe(I_GET_CHARACTERISTIC, device);
-	const [dValue, dUpdate] = useSubscribe(D_GET_CHARACTERISTIC, device);
+	const [pidValue, pidUpdate] = useSubscribe(PID_GET_CHARACTERISTIC, device);
+	const [numOfPids, numOfPidsUpdate] = useSubscribe(
+		PID_SIZE_GET_CHARACTERISTIC,
+		device
+	);
+	const [numOfFunctions, numOfFunctionsUpdate] = useSubscribe(
+		CALLBACK_SIZE_GET_CHARACTERISTIC,
+		device
+	);
+
 	const [extraValue, extraUpdate] = useSubscribe(
 		EXTRA_GET_CHARACTERISTIC,
 		device
 	);
 
-	const [sendP] = useSend(P_SET_CHARACTERISTIC, device, password, pUpdate);
-	const [sendI] = useSend(I_SET_CHARACTERISTIC, device, password, iUpdate);
-	const [sendD] = useSend(D_SET_CHARACTERISTIC, device, password, dUpdate);
+	const [sendPid] = useSend(
+		PID_SET_CHARACTERISTIC,
+		device,
+		password,
+		pidUpdate
+	);
 	const [sendExtra] = useSend(
 		EXTRA_SET_CHARACTERISTIC,
 		device,
@@ -54,17 +62,32 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 		CALLBACK_IDX_SET_CHARACTERISTIC,
 		device,
 		password,
-		dUpdate
+		pidUpdate
 	);
 
 	const updateAll = () => {
-		trigger("impactLight");
-		pUpdate();
-		iUpdate();
-		dUpdate();
+		try {
+			trigger("impactLight");
+		} catch (error) {}
+		pidUpdate();
+		numOfPidsUpdate();
+		numOfFunctionsUpdate();
 		extraUpdate();
 	};
 
+	const makePidComponents = () => {
+		console.log(numOfPids);
+		return [...Array(parseInt(numOfPids ? numOfPids : "0"))].map(
+			(element, idx) => (
+				<PidComponent
+					pidValue={pidValue}
+					sendPid={sendPid}
+					idx={idx}
+					key={"pid-component" + idx}
+				/>
+			)
+		);
+	};
 	return (
 		<View
 			pointerEvents={device ? "auto" : "none"}
@@ -94,17 +117,10 @@ const ContentComponent: FunctionComponent<ContentComponentProps> = ({
 					FORÇAR ATUALIZAÇÃO
 				</Text>
 			</TouchableOpacity>
-
-			<PidComponent
-				pValue={pValue}
-				iValue={iValue}
-				dValue={dValue}
-				sendP={sendP}
-				sendI={sendI}
-				sendD={sendD}
-			/>
+			{makePidComponents()}
 			<ExtraComponent
 				extraValue={extraValue}
+				numOfFunc={parseInt(numOfFunctions ? numOfFunctions : "0")}
 				sendExtra={sendExtra}
 				sendAction={sendAction}
 			/>
