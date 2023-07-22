@@ -3,29 +3,26 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { FunctionComponent } from "react";
+import { FunctionComponent, useMemo } from "react";
 
 import { Text, View } from "react-native";
 import CardComponent from "../CardComponent";
 
 interface PidComponentProps {
-	pValue: string;
-	iValue: string;
-	dValue: string;
-
-	sendP: (data: string) => void;
-	sendI: (data: string) => void;
-	sendD: (data: string) => void;
+	pidValue: string;
+	sendPid: (data: string) => void;
 }
 
 const PidComponent: FunctionComponent<PidComponentProps> = ({
-	pValue,
-	iValue,
-	dValue,
-	sendP,
-	sendI,
-	sendD,
+	pidValue,
+	sendPid,
 }) => {
+	const pidParsed: PidResponse | undefined = useMemo(() => {
+		try {
+			return JSON.parse(pidValue);
+		} catch (error) {}
+	}, [pidValue]);
+
 	return (
 		<View
 			style={{
@@ -75,7 +72,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 							color: "red",
 						}}
 					>
-						P: {parseFloat(pValue).toFixed(3)}
+						P: {pidParsed?.pid[0][0]}
 					</Text>
 					<Text
 						style={{
@@ -84,7 +81,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 							color: "green",
 						}}
 					>
-						I: {parseFloat(iValue).toFixed(3)}
+						I: {pidParsed?.pid[0][1]}
 					</Text>
 					<Text
 						style={{
@@ -93,14 +90,14 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 							color: "blue",
 						}}
 					>
-						D: {parseFloat(dValue).toFixed(3)}
+						D: {pidParsed?.pid[0][2]}
 					</Text>
 				</View>
 			</View>
 
 			<CardComponent
 				cardCallBack={(value: string) => {
-					sendP(value);
+					sendPid(value);
 				}}
 				cardTitle="P"
 				defaultColor="red"
@@ -108,7 +105,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 			/>
 			<CardComponent
 				cardCallBack={(value: string) => {
-					sendI(value);
+					sendPid(value);
 				}}
 				cardTitle="I"
 				defaultColor="green"
@@ -116,7 +113,7 @@ const PidComponent: FunctionComponent<PidComponentProps> = ({
 			/>
 			<CardComponent
 				cardCallBack={(value: string) => {
-					sendD(value);
+					sendPid(value);
 				}}
 				cardTitle="D"
 				defaultColor="blue"
